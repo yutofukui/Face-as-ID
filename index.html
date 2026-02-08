@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Face as ID</title>
+    <style>
+        :root {
+            --bg-color: #12141a;
+            --text-color: #ffffff;
+            --panel-bg: #1e212b;
+            --accent: #ffffff;
+            --dim: #666;
+            --font-main: "ui-sans-serif", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-mono: "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            overflow: hidden;
+
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        header {
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid #333;
+            background: var(--bg-color);
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--dim);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--accent);
+        }
+
+
+        .view-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 50px);
+            overflow: hidden;
+        }
+
+        .view {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr 1fr;
+
+            gap: 20px;
+            padding: 20px;
+            height: 100%;
+            width: 100%;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 0;
+
+        }
+
+        .col-title {
+            font-size: 0.75rem;
+            color: var(--dim);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .canvas-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+
+        }
+
+
+        .control-panel {
+            background: var(--panel-bg);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border: 1px solid #333;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: #0d0e12;
+            border: 1px solid #444;
+            color: var(--text-color);
+            padding: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            border-radius: 4px;
+            resize: none;
+        }
+
+        button {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        button:hover:not(:disabled) {
+            background: #555;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.primary {
+            background: #fff;
+            color: #000;
+        }
+
+        button.primary:hover:not(:disabled) {
+            background: #ddd;
+        }
+
+        .drop-area {
+            border: 2px dashed #444;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            color: #888;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .drop-area:hover,
+        .drop-area.drag {
+            border-color: #fff;
+            background: #222;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+
+        .sticker-word-row {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .sticker-word-input {
+            flex: 1;
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .sticker-word-input:focus {
+            outline: none;
+            border-color: #888;
+        }
+
+        .remove-word-btn {
+            background: #333;
+            border: 1px solid #444;
+            color: #aaa;
+            width: 32px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .remove-word-btn:hover {
+            background: #444;
+            color: #fff;
+        }
+
+
+        #view-about {
+            padding: 30px 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 40px;
+            height: 100%;
+            align-items: start;
+        }
+
+        .about-col {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            height: 100%;
+            /* overflow-y: auto; */
+        }
+
+
+        .about-col::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .about-col::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        h1.slide-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin: 0 0 4px 0;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        p.slide-subtitle {
+            font-size: 0.85rem;
+            color: #888;
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+        }
+
+        .section-block {
+            margin-bottom: 0;
+        }
+
+        .section-block h2 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #666;
+            margin: 0 0 5px 0;
+            font-weight: 700;
+            border-left: 2px solid #444;
+            padding-left: 8px;
+        }
+
+        .content {
+            font-size: 0.85rem;
+            line-height: 1.45;
+            color: #ccc;
+        }
+
+        .content p {
+            margin: 0 0 0.5em 0;
+        }
+
+        .content ul,
+        .content ol {
+            margin: 0;
+            padding-left: 1.4em;
+            color: #bbb;
+        }
+
+        .content li {
+            margin-bottom: 0.4em;
+        }
+
+        .content strong {
+            color: #fff;
+        }
+
+
+        .references-list {
+            font-size: 0.75rem;
+            list-style: none;
+            padding: 0 !important;
+            margin-top: 3px;
+        }
+
+        .references-list li {
+            position: relative;
+            padding-left: 10px;
+            margin-bottom: 0.2em !important;
+            color: #888;
+            line-height: 1.3;
+        }
+
+        .references-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #444;
+        }
+
+        .references-list strong {
+            color: #bbb;
+        }
+
+        .ref-group-title {
+            font-size: 0.65rem;
+            color: #666;
+            margin: 8px 0 2px 0;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+
+        @media (max-width: 1000px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                overflow-y: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Face as ID</div>
+        <nav>
+            <a id="nav-gen" class="active">Generate</a>
+            <a id="nav-about">About</a>
+        </nav>
+    </header>
+
+    <div class="view-container">
+
+        <div id="view-generate" class="view active">
+            <div class="main-layout">
+
+                <div class="column">
+                    <div class="col-title">INPUT & SETTINGS</div>
+
+                    <div class="control-panel">
+
+                        <div id="camContainer"
+                            style="display:none; position:relative; width:100%; aspect-ratio:16/9; background:#000; border-radius:4px; overflow:hidden;">
+                            <video id="video" autoplay playsinline></video>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button id="startCam" style="flex:1;">START CAMERA</button>
+                            <button id="captureBtn" class="primary" style="flex:1;" disabled>CAPTURE</button>
+                        </div>
+                        <label class="toggle-row">
+                            <input type="checkbox" id="autoZoom" checked> AUTO ZOOM (FACE CROP)
+                        </label>
+
+
+                        <div id="drop" class="drop-area">
+                            DROP IMAGE OR CLICK
+                        </div>
+                        <input type="file" id="file" accept="image/*" style="display:none;" />
+
+
+                        <div>
+                            <div class="col-title" style="margin-bottom:5px;">STICKER TEXT</div>
+                            <div id="sticker-words-container"></div>
+                            <button id="add-word-btn"
+                                style="width: 100%; margin-top: 5px; opacity: 0.7; padding: 6px;">+ ADD WORD</button>
+                        </div>
+
+                        <div style="display:flex; gap:10px;">
+                            <button id="apply" disabled style="flex:1;">APPLY</button>
+                            <button id="randomize" disabled style="flex:1;">RANDOMIZE</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="column">
+                    <div class="col-title">SOURCE IMAGE (INPUT)</div>
+                    <div class="canvas-container">
+                        <canvas id="srcCanvas"></canvas>
+                    </div>
+                </div>
+
+
+                <div class="column">
+                    <div class="col-title">PROCESSED RESULT</div>
+                    <div class="canvas-container">
+                        <canvas id="outCanvas"></canvas>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <button id="export" disabled class="primary" style="width:100%;">EXPORT CARD (PNG)</button>
+                    </div>
+                    <img id="pngOut" style="display:none;" />
+                </div>
+            </div>
+        </div>
+
+
+        <div id="view-about" class="view">
+            <div class="about-grid">
+
+                <div class="about-col">
+
+
+
+                    <div class="section-block">
+                        <div class="content">
+                            <p>リモート環境では、名刺交換の代わりにプロフィールリンクや顔写真が渡されます。
+                                しかし、初対面の記憶は顔だけでは固定されません。
+                                服装、背景、画角、光、空気感。その場の条件ごと人は覚えています。
+                                にもかかわらず、後から見返す写真は「別の時期の別の姿」であることが多く、思い出す手がかりになりにくい。
+                            </p>
+                            <p>本作は、リモートで出会った
+                                その瞬間のあなたを、顔＝IDとしてラベル化しながら共有できる「名刺」を提案します。
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="section-block">
+                        <h2>体験 (What Happens)</h2>
+                        <div class="content">
+                            <ol>
+                                <li><strong>撮影</strong>：カメラを起動し、ボタンを押して撮影。</li>
+                                <li><strong>生成</strong>：顔の上に指定の単語のステッカーがランダムに貼られる。大きさ・角度・位置は毎回変化。</li>
+                                <li><strong>共有</strong>：生成された画像を名刺として保存し、相手に渡す。</li>
+                            </ol>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="section-block" style="flex:1; display:flex; align-items:flex-end; min-height:0;">
+                        <img src="/yuto2.png"
+                            style="width:100%; height:auto; max-height:100%; object-fit:contain; object-position:bottom left; opacity:1.0; border: 1px solid #444; border-radius:4px; background:#000;">
+                    </div>
+                </div>
+
+
+                <div class="about-col" style="justify-content: space-between;">
+                    <div style="display:flex; flex-direction:column; gap:30px; margin-bottom: 20px;">
+
+                        <div class="section-block">
+                            <h2>ねらい (Aim)</h2>
+                            <div class="content">
+                                <ul>
+                                    <li><strong>今のあなたが渡る</strong>：服・背景・髪型・距離感など、出会った条件ごと保存される。</li>
+                                    <li><strong>思い出しやすい</strong>：後日見返したとき、初対面の画角と結びつきやすい。</li>
+                                    <li><strong>自己紹介が視覚になる</strong>：テキストの羅列ではなく、顔と同時に情報が届く。</li>
+                                    <li><strong>交換が起きる</strong>：リンクを渡せば相手もその場で生成でき、名刺交換可能。</li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <div class="section-block">
+                            <h2>コンセプト (Concept)</h2>
+                            <div class="content">
+                                <p>現代の顔は、コミュニケーションの表情だけでなく、認識・分類・検索のための「ID」として扱われます。
+                                    プロフィールやラベルが先に与えられ、会う前から扱い方が決まっていく。
+                                </p>
+                                <p>本作は、その現象を名刺という最小の自己紹介装置に圧縮して提示します。
+                                    顔に貼られた言葉は、あなたを説明するようでいて、同時に、あなたを単純化し、固定します。
+                                    「誰かを知る」とは、どこまでが理解で、どこからが決めつけなのか。
+                                    その境界を、リモートの一枚に埋め込みます。
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="section-block">
+                            <h2>技術メモ (Tech)</h2>
+                            <div class="content">
+                                <ul>
+                                    <li>顔ランドマーク検出とメッシュ変形により、ステッカー文字が顔の立体に沿って歪む。</li>
+                                    <li>出力は画像として保存でき、交換・転送しやすい形式にしている。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="section-block" style="border-top: 1px solid #333; padding-top:20px;">
+                        <h2>参考作品・文献 (References)</h2>
+                        <div class="content">
+
+                            <h4 class="ref-group-title">1) 顔＝ID／証明写真</h4>
+                            <ul class="references-list">
+                                <li><strong>澤田知子《ID400》</strong> 証明写真の規格と自己の可変性</li>
+                                <li><strong>大山顕『新写真論 スマホと顔』</strong> スマホ時代の顔と写真の制度</li>
+                            </ul>
+
+
+                            <h4 class="ref-group-title">2) 表現形式：顔／身体×言葉</h4>
+                            <ul class="references-list">
+                                <li><strong>Shirin Neshat 《Women of Allah》</strong> 身体・顔への文字介入</li>
+                                <li><strong>Jenny Holzer</strong>　言葉を「見るもの」にする実践</li>
+                            </ul>
+
+
+                            <h4 class="ref-group-title">3) 批評の射程：規範・身体／監視・識別</h4>
+                            <ul class="references-list">
+                                <li><strong>ORLAN</strong>　顔の規範・身体の規格化への批評</li>
+                                <li><strong>Simone Browne <em>Dark Matters: On the Surveillance of
+                                            Blackness</em></strong>　監視と身体／識別の歴史</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
