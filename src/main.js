@@ -661,12 +661,43 @@ async function exportPng() {
 
 
     const dataUrl = c.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = `face_sticker_poster_${Date.now()}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    const download = () => {
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = `face_sticker_poster_${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    if (navigator.canShare && navigator.share) {
+        c.toBlob(async (blob) => {
+            if (!blob) {
+                download();
+                return;
+            }
+            const file = new File([blob], "face_sticker_card.png", { type: "image/png" });
+            if (navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: "Face Sticker Card",
+                    });
+                } catch (err) {
+                    if (err.name !== "AbortError") {
+                        console.error(err);
+                        download();
+                    }
+                }
+            } else {
+                download();
+            }
+        });
+        return;
+    }
+
+    download();
 }
 
 
