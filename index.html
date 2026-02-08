@@ -401,11 +401,57 @@
         }
 
 
-        @media (max-width: 1000px) {
-            .about-grid {
+        @media (max-width: 900px) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
+
+            .view-container {
+                height: auto;
+                overflow: visible;
+            }
+
+            .main-layout {
                 grid-template-columns: 1fr;
                 gap: 30px;
-                overflow-y: auto;
+                height: auto;
+                overflow: visible;
+            }
+
+            .column {
+                width: 100%;
+            }
+
+            .canvas-container {
+                aspect-ratio: 1 / 1;
+                max-height: 50vh;
+            }
+
+            #view-about {
+                padding: 20px;
+                height: auto;
+                overflow: visible;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                height: auto;
+                overflow: visible;
+            }
+
+            .about-col {
+                height: auto;
+                overflow: visible;
+            }
+
+            .section-block h2 {
+                font-size: 0.8rem;
+            }
+
+            .content {
+                font-size: 0.9rem;
             }
         }
     </style>
