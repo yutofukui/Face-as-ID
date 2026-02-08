@@ -292,7 +292,7 @@
             flex-direction: column;
             gap: 30px;
             height: 100%;
-            /* overflow-y: auto; */
+            overflow-y: auto;
         }
 
 
@@ -553,86 +553,39 @@
             <div class="about-grid">
 
                 <div class="about-col">
-
-
-
                     <div class="section-block">
                         <div class="content">
-                            <p>リモート環境では、名刺交換の代わりにプロフィールリンクや顔写真が渡されます。
-                                しかし、初対面の記憶は顔だけでは固定されません。
-                                服装、背景、画角、光、空気感。その場の条件ごと人は覚えています。
-                                にもかかわらず、後から見返す写真は「別の時期の別の姿」であることが多く、思い出す手がかりになりにくい。
+                            <p>リモートの初対面では、相手に関する情報の量が対面と比べて、圧倒的に少ない。
+                                画面には顔が中心に映る一方で、それ以外の情報は掴みにくく、相手の記憶の定着が難しい。
+                                結果として、後から相手を思い出すときに頼りになるのは、いつ撮られたか不明なプロフィール画像のみである。
+                                それの多くの場合は、リモートで会ったときとは別の時期の相手であり、印象が一致しにくい。
                             </p>
-                            <p>本作は、リモートで出会った
-                                その瞬間のあなたを、顔＝IDとしてラベル化しながら共有できる「名刺」を提案します。
+                            <p>顔の載っていない名刺は、対面の時代には成立していたとしても、情報の少ないリモート時代には渡すべき情報と考える。
+                                本作は、リモートで出会ったその瞬間の画面上に映る自分を名刺として渡す仕組みである。
+                                撮影すると、自分を紹介する単語と共に、画像として共有できる。
+                                現代における顔は、証明写真、顔認証といった本人を識別する情報として扱われ、顔はその人を表すIDとして機能している。
+                                対面で会わない状況では、このIDとしての顔が印象の中心である。だからこそ、思い出すために渡し合う名刺に「その瞬間の顔」を組み込み、
+                                交換できる形にすることに意味がある。
                             </p>
                         </div>
                     </div>
-
 
                     <div class="section-block">
-                        <h2>体験 (What Happens)</h2>
+                        <h2>コンセプト (Concept)</h2>
                         <div class="content">
-                            <ol>
-                                <li><strong>撮影</strong>：カメラを起動し、ボタンを押して撮影。</li>
-                                <li><strong>生成</strong>：顔の上に指定の単語のステッカーがランダムに貼られる。大きさ・角度・位置は毎回変化。</li>
-                                <li><strong>共有</strong>：生成された画像を名刺として保存し、相手に渡す。</li>
-                            </ol>
+                            <p>名刺はもともと、相手に自分の名前や所属、役職を伝え、次に会うための手掛かりを渡す道具であった。
+                                同時にそれは、「この人をどう理解し、どう接するか」を先に共有する仕組みでもある。
+                                つまり名刺は、相手を覚えるための情報を渡すと同時に、相手の見方を決めるラベルでもあった。
+                            </p>
+                            <p>現代のリモート環境では、対面で得られる情報は少ないぶん、このラベルがより強く働く。
+                                情報が先行し、相手がどんな人物か理解した気になる。
+                            </p>
+                            <p>本作《Face as ID》は、この名刺の性質を見える形にする。撮影した顔に、あなたを表す単語のステッカーが貼られる。
+                                単なる飾りでなく、顔にラベルが貼られた状態そのものである。言葉は自己紹介として、役立つ一方で、人を単純化し、
+                                固定してしまう力がある。本作は理解と決めつけが同時に起きることを、名刺という形式の中で示す。
+                            </p>
                         </div>
                     </div>
-
-
-
-
-                    <div class="section-block" style="flex:1; display:flex; align-items:flex-end; min-height:0;">
-                        <img src="/yuto2.png"
-                            style="width:100%; height:auto; max-height:100%; object-fit:contain; object-position:bottom left; opacity:1.0; border: 1px solid #444; border-radius:4px; background:#000;">
-                    </div>
-                </div>
-
-
-                <div class="about-col" style="justify-content: space-between;">
-                    <div style="display:flex; flex-direction:column; gap:30px; margin-bottom: 20px;">
-
-                        <div class="section-block">
-                            <h2>ねらい (Aim)</h2>
-                            <div class="content">
-                                <ul>
-                                    <li><strong>今のあなたが渡る</strong>：服・背景・髪型・距離感など、出会った条件ごと保存される。</li>
-                                    <li><strong>思い出しやすい</strong>：後日見返したとき、初対面の画角と結びつきやすい。</li>
-                                    <li><strong>自己紹介が視覚になる</strong>：テキストの羅列ではなく、顔と同時に情報が届く。</li>
-                                    <li><strong>交換が起きる</strong>：リンクを渡せば相手もその場で生成でき、名刺交換可能。</li>
-                                </ul>
-                            </div>
-                        </div>
-
-
-                        <div class="section-block">
-                            <h2>コンセプト (Concept)</h2>
-                            <div class="content">
-                                <p>現代の顔は、コミュニケーションの表情だけでなく、認識・分類・検索のための「ID」として扱われます。
-                                    プロフィールやラベルが先に与えられ、会う前から扱い方が決まっていく。
-                                </p>
-                                <p>本作は、その現象を名刺という最小の自己紹介装置に圧縮して提示します。
-                                    顔に貼られた言葉は、あなたを説明するようでいて、同時に、あなたを単純化し、固定します。
-                                    「誰かを知る」とは、どこまでが理解で、どこからが決めつけなのか。
-                                    その境界を、リモートの一枚に埋め込みます。
-                                </p>
-                            </div>
-                        </div>
-
-
-                        <div class="section-block">
-                            <h2>技術メモ (Tech)</h2>
-                            <div class="content">
-                                <ul>
-                                    <li>顔ランドマーク検出とメッシュ変形により、ステッカー文字が顔の立体に沿って歪む。</li>
-                                    <li>出力は画像として保存でき、交換・転送しやすい形式にしている。</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
 
                     <div class="section-block" style="border-top: 1px solid #333; padding-top:20px;">
                         <h2>参考作品・文献 (References)</h2>
@@ -657,6 +610,48 @@
                                 <li><strong>ORLAN</strong>　顔の規範・身体の規格化への批評</li>
                                 <li><strong>Simone Browne <em>Dark Matters: On the Surveillance of
                                             Blackness</em></strong>　監視と身体／識別の歴史</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="about-col">
+                    <div class="section-block" style="margin-bottom: 20px;">
+                        <img src="/yuto2.png"
+                            style="width:100%; height:auto; object-fit:contain; border: 1px solid #444; border-radius:4px; background:#000;">
+                    </div>
+
+                    <div class="section-block">
+                        <h2>体験 (What Happens)</h2>
+                        <div class="content">
+                            <ol>
+                                <li><strong>撮影</strong>：カメラを起動し、ボタンを押して撮影。</li>
+                                <li><strong>生成</strong>：顔の上に指定の単語のステッカーがランダムに貼られる。RANDOMIZEを押すと、再編成可能。</li>
+                                <li><strong>共有</strong>：生成された画像を名刺として保存し、相手に渡す。</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="section-block">
+                        <h2>ねらい (Aim)</h2>
+                        <div class="content">
+                            <ul>
+                                <li><strong>今のあなたが渡る</strong>：服・背景・髪型・距離感など、出会った条件ごと保存される。</li>
+                                <li><strong>思い出しやすい</strong>：後日見返したとき、初対面のリモート画角と結びつきやすい。</li>
+                                <li><strong>視覚が自己紹介になる</strong>：テキストの羅列ではなく、顔と同時に情報が届く。</li>
+                                <li><strong>交換が起きる</strong>：リンクを渡せば相手もその場で生成でき、名刺交換可能。</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section-block">
+                        <h2>技術メモ (Tech)</h2>
+                        <div class="content">
+                            <ul>
+                                <li>顔ランドマーク検出とメッシュ変形により、ステッカー文字が顔の立体に沿って歪む。</li>
+                                <li>ブラウザで完結し、モバイルにも対応したUI。</li>
+                                <li>出力は画像として保存でき、交換・転送しやすい形式。</li>
                             </ul>
                         </div>
                     </div>
