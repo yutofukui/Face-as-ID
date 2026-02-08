@@ -671,7 +671,9 @@ async function exportPng() {
         document.body.removeChild(link);
     };
 
-    if (navigator.canShare && navigator.share) {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile && navigator.canShare && navigator.share) {
         c.toBlob(async (blob) => {
             if (!blob) {
                 download();
