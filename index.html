@@ -413,10 +413,23 @@
             }
 
             .main-layout {
-                grid-template-columns: 1fr;
+                display: flex;
+                flex-direction: column;
                 gap: 30px;
                 height: auto;
                 overflow: visible;
+            }
+
+            .main-layout>.column:nth-child(1) {
+                order: 1;
+            }
+
+            .main-layout>.column:nth-child(2) {
+                order: 3;
+            }
+
+            .main-layout>.column:nth-child(3) {
+                order: 2;
             }
 
             .column {
@@ -426,6 +439,10 @@
             .canvas-container {
                 aspect-ratio: 1 / 1;
                 max-height: 50vh;
+            }
+
+            .view:not(.active) {
+                display: none !important;
             }
 
             #view-about {
